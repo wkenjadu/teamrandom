@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>롤CK 랜덤 팀</title>
+
+<style>
+:root {
+  --bg-main: radial-gradient(circle at top, #020617, #000);
+  --table-bg: linear-gradient(180deg, #020617, #0f172a);
+  --border: #334155;
+  --text: #e5e7eb;
+  --th-bg: #020617;
+  --input-bg: #020617;
+  --btn-bg: linear-gradient(135deg, #1e3a8a, #2563eb);
+  --btn-text: #e5e7eb;
+}
+
+body.light {
+  --bg-main: linear-gradient(180deg, #f8fafc, #e5e7eb);
+  --table-bg: #ffffff;
+  --border: #cbd5e1;
+  --text: #0f172a;
+  --th-bg: #e5e7eb;
+  --input-bg: #ffffff;
+  --btn-bg: linear-gradient(135deg, #2563eb, #3b82f6);
+  --btn-text: #ffffff;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg-main);
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  color: var(--text);
+}
+
+.wrap {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 300px;
+  background: var(--table-bg);
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--text);
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+}
+
+.center-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  padding: 26px 50px;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: 3px solid #facc15;
+  border-radius: 20px;
+}
+
+.mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.red { background:#7f1d1d; }
+.blue { background:#1e3a8a; }
+</style>
+</head>
+
+<body>
+
+<button class="mode-toggle" onclick="toggleMode()">🌙 다크</button>
+
+<div class="wrap">
+
+  <table>
+    <tr><th colspan="3">멤버</th></tr>
+    <tr><th></th><td><input id="top1"></td><td><input id="top2"></td></tr>
+    <tr><th></th><td><input id="jg1"></td><td><input id="jg2"></td></tr>
+    <tr><th></th><td><input id="mid1"></td><td><input id="mid2"></td></tr>
+    <tr><th></th><td><input id="adc1"></td><td><input id="adc2"></td></tr>
+    <tr><th></th><td><input id="sup1"></td><td><input id="sup2"></td></tr>
+  </table>
+
+  <div class="center-btn">
+    <button onclick="shuffleTeams()">🎲 랜덤 섞기</button>
+  </div>
+
+  <table>
+    <tr>
+      <th></th>
+      <th class="red">레드</th>
+      <th class="blue">블루</th>
+    </tr>
+    <tr><th></th><td id="r_top"></td><td id="b_top"></td></tr>
+    <tr><th></th><td id="r_jg"></td><td id="b_jg"></td></tr>
+    <tr><th></th><td id="r_mid"></td><td id="b_mid"></td></tr>
+    <tr><th></th><td id="r_adc"></td><td id="b_adc"></td></tr>
+    <tr><th></th><td id="r_sup"></td><td id="b_sup"></td></tr>
+  </table>
+
+</div>
+
+<script>
+const r = k => document.getElementById('r_'+k);
+const b = k => document.getElementById('b_'+k);
+
+function shuffleTeams() {
+  const roles = [
+    ['top','top1','top2'],
+    ['jg','jg1','jg2'],
+    ['mid','mid1','mid2'],
+    ['adc','adc1','adc2'],
+    ['sup','sup1','sup2']
+  ];
+
+  for (const [key,a,bid] of roles) {
+    const p1 = document.getElementById(a).value.trim();
+    const p2 = document.getElementById(bid).value.trim();
+    if (!p1 || !p2) return alert('2명씩 입력하세요');
+
+    Math.random() < 0.5
+      ? (r(key).textContent=p1, b(key).textContent=p2)
+      : (r(key).textContent=p2, b(key).textContent=p1);
+  }
+}
+
+function toggleMode() {
+  document.body.classList.toggle('light');
+}
+</script>
+
+</body>
+</html>
