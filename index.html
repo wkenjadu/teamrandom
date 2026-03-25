@@ -7,146 +7,96 @@
 <style>
 :root {
   --bg-main: radial-gradient(circle at top, #020617, #000);
-  --table-bg: linear-gradient(180deg, #020617, #0f172a);
+  --card: #0f172a;
   --border: #334155;
   --text: #e5e7eb;
-  --th-bg: #020617;
   --input-bg: #020617;
-  --btn-bg: linear-gradient(135deg, #1e3a8a, #2563eb);
-  --btn-text: #e5e7eb;
 }
 
 body.light {
   --bg-main: linear-gradient(180deg, #f8fafc, #e5e7eb);
-  --table-bg: #ffffff;
+  --card: #ffffff;
   --border: #cbd5e1;
   --text: #0f172a;
-  --th-bg: #e5e7eb;
   --input-bg: #ffffff;
-  --btn-bg: linear-gradient(135deg, #2563eb, #3b82f6);
-  --btn-text: #ffffff;
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: var(--bg-main);
-  min-height: 100vh;
   margin: 0;
-
+  padding: 40px 20px;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* ✅ 수정 */
-
-  overflow: auto; /* ✅ 핵심 */
-  padding: 40px 20px; /* ✅ 여백 */
-
-  position: relative;
   color: var(--text);
 }
 
-/* 연기 */
-body:not(.light)::before,
-body:not(.light)::after {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.08), transparent 40%),
-    radial-gradient(circle at 70% 60%, rgba(99,102,241,0.07), transparent 45%);
-  animation: smokeMove 22s linear infinite;
-  pointer-events: none;
+.container {
+  max-width: 800px;
+  width: 100%;
 }
 
-body:not(.light)::after {
-  animation-duration: 32s;
-  opacity: 0.6;
-}
-
-@keyframes smokeMove {
-  0% { transform: translate(0,0) scale(1); }
-  50% { transform: translate(-5%, -8%) scale(1.05); }
-  100% { transform: translate(0,0) scale(1); }
-}
-
-/* 레이아웃 */
-.wrap {
-  display: flex;
-  gap: 50px;
-  align-items: center;
-  flex-wrap: wrap; /* ✅ 모바일 대응 */
-  justify-content: center;
-}
-
-/* 테이블 */
-table {
-  border-collapse: collapse;
-  min-width: 280px;
-  background: var(--table-bg);
-  box-shadow: 0 20px 60px rgba(0,0,0,.4);
-}
-
-th, td {
+.card {
+  background: var(--card);
   border: 1px solid var(--border);
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  color: var(--text);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 input {
-  width: 100%;
-  padding: 8px;
+  padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--input-bg);
   color: var(--text);
 }
 
-/* 버튼 */
-.center-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 button {
-  padding: 22px 40px;
+  width: 100%;
+  padding: 18px;
   font-size: 20px;
   font-weight: 900;
+  border-radius: 16px;
+  border: none;
   cursor: pointer;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: 3px solid #facc15;
-  border-radius: 20px;
-  box-shadow: 0 0 30px rgba(37,99,235,.6);
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  margin: 20px 0;
 }
 
-/* 모드 버튼 */
-.mode-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 10px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  background: var(--table-bg);
-  color: var(--text);
+/* 결과 표 */
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td {
   border: 1px solid var(--border);
-  z-index: 10;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .red { background:#7f1d1d; }
 .blue { background:#1e3a8a; }
 
-/* 📱 모바일 */
-@media (max-width: 768px) {
-  .wrap {
-    flex-direction: column;
-    gap: 20px;
-  }
+.mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
 
-  button {
-    width: 100%;
+/* 모바일 */
+@media (max-width: 600px) {
+  .inputs {
+    grid-template-columns: 1fr;
   }
 }
 </style>
@@ -154,60 +104,61 @@ button {
 
 <body>
 
-<button class="mode-toggle" onclick="toggleMode()">🌙 다크</button>
+<button class="mode-toggle" onclick="toggleMode()">🌙</button>
 
-<div class="wrap">
+<div class="container">
 
-  <table>
-    <tr><th colspan="3">멤버</th></tr>
-    <tr><th></th><td><input id="top1"></td><td><input id="top2"></td></tr>
-    <tr><th></th><td><input id="jg1"></td><td><input id="jg2"></td></tr>
-    <tr><th></th><td><input id="mid1"></td><td><input id="mid2"></td></tr>
-    <tr><th></th><td><input id="adc1"></td><td><input id="adc2"></td></tr>
-    <tr><th></th><td><input id="sup1"></td><td><input id="sup2"></td></tr>
-  </table>
-
-  <div class="center-btn">
-    <button onclick="shuffleTeams()">🎲 랜덤 섞기</button>
+  <div class="card">
+    <h3>멤버 입력 (10명)</h3>
+    <div class="inputs">
+      <input id="p1">
+      <input id="p2">
+      <input id="p3">
+      <input id="p4">
+      <input id="p5">
+      <input id="p6">
+      <input id="p7">
+      <input id="p8">
+      <input id="p9">
+      <input id="p10">
+    </div>
   </div>
 
-  <table>
+  <button onclick="shuffle()">🎲 랜덤 섞기</button>
+
+  <table class="result-table">
     <tr>
-      <th></th>
       <th class="red">레드</th>
       <th class="blue">블루</th>
     </tr>
-    <tr><th></th><td id="r_top"></td><td id="b_top"></td></tr>
-    <tr><th></th><td id="r_jg"></td><td id="b_jg"></td></tr>
-    <tr><th></th><td id="r_mid"></td><td id="b_mid"></td></tr>
-    <tr><th></th><td id="r_adc"></td><td id="b_adc"></td></tr>
-    <tr><th></th><td id="r_sup"></td><td id="b_sup"></td></tr>
+    <tbody id="result"></tbody>
   </table>
 
 </div>
 
 <script>
-const r = k => document.getElementById('r_'+k);
-const b = k => document.getElementById('b_'+k);
+function shuffle() {
+  let players = [];
 
-function shuffleTeams() {
-  const roles = [
-    ['top','top1','top2'],
-    ['jg','jg1','jg2'],
-    ['mid','mid1','mid2'],
-    ['adc','adc1','adc2'],
-    ['sup','sup1','sup2']
-  ];
-
-  for (const [key,a,bid] of roles) {
-    const p1 = document.getElementById(a).value.trim();
-    const p2 = document.getElementById(bid).value.trim();
-    if (!p1 || !p2) return alert('2명씩 입력하세요');
-
-    Math.random() < 0.5
-      ? (r(key).textContent=p1, b(key).textContent=p2)
-      : (r(key).textContent=p2, b(key).textContent=p1);
+  for (let i = 1; i <= 10; i++) {
+    const v = document.getElementById('p'+i).value.trim();
+    if (!v) return alert('10명 입력하세요');
+    players.push(v);
   }
+
+  players.sort(() => Math.random() - 0.5);
+
+  let html = "";
+  for (let i = 0; i < 5; i++) {
+    html += `
+      <tr>
+        <td>${players[i]}</td>
+        <td>${players[i+5]}</td>
+      </tr>
+    `;
+  }
+
+  document.getElementById("result").innerHTML = html;
 }
 
 function toggleMode() {
