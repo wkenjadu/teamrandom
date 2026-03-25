@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>롤CK 랜덤 팀</title>
+<title>증바람CK 랜덤 팀</title>
 
 <style>
 :root {
@@ -32,26 +32,57 @@ body {
   background: var(--bg-main);
   min-height: 100vh;
   margin: 0;
+
   display: flex;
   justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  align-items: flex-start; /* ✅ 수정 */
+
+  overflow: auto; /* ✅ 핵심 */
+  padding: 40px 20px; /* ✅ 여백 */
+
   position: relative;
   color: var(--text);
 }
 
+/* 연기 */
+body:not(.light)::before,
+body:not(.light)::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(59,130,246,0.08), transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(99,102,241,0.07), transparent 45%);
+  animation: smokeMove 22s linear infinite;
+  pointer-events: none;
+}
+
+body:not(.light)::after {
+  animation-duration: 32s;
+  opacity: 0.6;
+}
+
+@keyframes smokeMove {
+  0% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-5%, -8%) scale(1.05); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+/* 레이아웃 */
 .wrap {
   display: flex;
   gap: 50px;
   align-items: center;
-  position: relative;
-  z-index: 2;
+  flex-wrap: wrap; /* ✅ 모바일 대응 */
+  justify-content: center;
 }
 
+/* 테이블 */
 table {
   border-collapse: collapse;
-  min-width: 300px;
+  min-width: 280px;
   background: var(--table-bg);
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
 }
 
 th, td {
@@ -71,6 +102,7 @@ input {
   color: var(--text);
 }
 
+/* 버튼 */
 .center-btn {
   display: flex;
   justify-content: center;
@@ -78,24 +110,45 @@ input {
 }
 
 button {
-  padding: 26px 50px;
-  font-size: 22px;
+  padding: 22px 40px;
+  font-size: 20px;
   font-weight: 900;
   cursor: pointer;
   background: var(--btn-bg);
   color: var(--btn-text);
   border: 3px solid #facc15;
   border-radius: 20px;
+  box-shadow: 0 0 30px rgba(37,99,235,.6);
 }
 
+/* 모드 버튼 */
 .mode-toggle {
   position: fixed;
   top: 20px;
   right: 20px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--table-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  z-index: 10;
 }
 
 .red { background:#7f1d1d; }
 .blue { background:#1e3a8a; }
+
+/* 📱 모바일 */
+@media (max-width: 768px) {
+  .wrap {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
 </style>
 </head>
 
